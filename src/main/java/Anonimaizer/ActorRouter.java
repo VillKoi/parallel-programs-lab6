@@ -48,16 +48,16 @@ public class ActorRouter {
                 get(() -> headerValueByName("Raw-Request-URI", requestUri -> {
                             System.out.println(requestUri);
                             URL url = new URL(requestUri);
-                            Query query = url.getUri().query();
-                            Optional<String> url = query.get(URL_QUERY);
+                            Query query = url.getQuery();
+                            Optional<String> testUrl = query.get(URL_QUERY);
                             Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
 
                             Integer requestNumber = Integer.parseInt(count.get());
                             if (requestNumber == 0) {
-                                return completeWithFuture(makeRequest(url.get()));
+                                return completeWithFuture(makeRequest(testUrl.get()));
                             }
 
-                            String newUrl = getNewUrl(url.get(), requestNumber - 1);
+                            String newUrl = getNewUrl(testUrl.get(), requestNumber - 1);
 
                             return completeWithFuture(makeRequest(newUrl));
                         }
