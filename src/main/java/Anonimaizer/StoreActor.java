@@ -10,15 +10,15 @@ public class StoreActor extends AbstractActor {
 // Он принимает две команды
 // -	список серверов (который отправит zookeeper watcher)
 // -	запрос на получение случайного сервера
-    private Map<String, String> storage = new HashMap<>();
+    private Map<String, String> servers = new HashMap<>();
 
     @Override
     public AbstractActor.Receive createReceive(){
         return receiveBuilder(
         ).match(
-                TestInformation.class, this::setTestResult
+                ServerList.class, 
         ).match(
-                String.class, packageID -> {
+                Random.class, packageID -> {
                     sender().tell(getResult(packageID), self());
                 }
         ).build();
