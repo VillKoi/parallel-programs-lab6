@@ -45,7 +45,9 @@ public class ActorRouter {
     private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
         return route(
                 get(() -> {
+                    requestContext
                     getUri()
+                    context
                     request().toString();
                     System.out.println(request(re).toString());
                     Query query = request.getUri().query();
