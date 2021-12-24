@@ -16,9 +16,11 @@ public class StoreActor extends AbstractActor {
     public AbstractActor.Receive createReceive(){
         return receiveBuilder(
         ).match(
-                ServerList.class, 
+                ServerList.class, servers -> {
+                    this.servers = servers.getServers();
+                }
         ).match(
-                Random.class, packageID -> {
+                Random.class, randomInt -> {
                     sender().tell(getResult(packageID), self());
                 }
         ).build();
