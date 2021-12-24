@@ -1,8 +1,10 @@
 package Anonimaizer;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StoreActor extends AbstractActor {
@@ -10,7 +12,7 @@ public class StoreActor extends AbstractActor {
 // Он принимает две команды
 // -	список серверов (который отправит zookeeper watcher)
 // -	запрос на получение случайного сервера
-    private Map<String, String> servers = new HashMap<>();
+    private List<String> servers;
 
     @Override
     public AbstractActor.Receive createReceive(){
@@ -20,8 +22,8 @@ public class StoreActor extends AbstractActor {
                     this.servers = servers.getServers();
                 }
         ).match(
-                Random.class, randomInt -> {
-                    sender().tell(getResult(packageID), self());
+                Random.class, random -> {
+                    sender().tell(servers.get(random.getInt()), ActorRef.noSender());
                 }
         ).build();
     }
