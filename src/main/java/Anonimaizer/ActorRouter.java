@@ -44,20 +44,21 @@ public class ActorRouter {
 
     private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
         return route(
-                get(() -> headerValueByName("Raw-Request-URI", requestUri ->
-//                    System.out.println(requestUri);
-                    Query query = requestUri.getUri().query();
-                    Optional<String> url = query.get(URL_QUERY);
-                    Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
+                get(() -> headerValueByName("Raw-Request-URI", requestUri -> {
+                            System.out.println(requestUri);
+                            Query query = requestUri.getUri().query();
+                            Optional<String> url = query.get(URL_QUERY);
+                            Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
 
-                    Integer requestNumber = Integer.parseInt(count.get());
-                    if (requestNumber == 0) {
-                        return  completeWithFuture(makeRequest(url.get()));
-                    }
+                            Integer requestNumber = Integer.parseInt(count.get());
+                            if (requestNumber == 0) {
+                                return completeWithFuture(makeRequest(url.get()));
+                            }
 
-                    String newUrl = getNewUrl(url.get(), requestNumber - 1);
+                            String newUrl = getNewUrl(url.get(), requestNumber - 1);
 
-                    return completeWithFuture(makeRequest(newUrl));
+                            return completeWithFuture(makeRequest(newUrl));
+                        }
                 ))
         );
 
