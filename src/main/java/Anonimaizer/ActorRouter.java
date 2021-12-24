@@ -71,24 +71,8 @@ public class ActorRouter {
                 );
     }
 
-    private Sink<Pair<String, Integer>, CompletionStage<Long>> createFlow() {
-        return Flow.<Pair<String, Integer>>create()
-                .mapConcat(pair ->
-                        new ArrayList<>(Collections.nCopies(pair.second(), pair))
-                )
-                .mapAsync(10, param -> {
-                    long startTime = System.currentTimeMillis();
-                    AsyncHttpClient client = asyncHttpClient();
-                    return client.prepareGet(param.first()).execute().toCompletableFuture().thenCompose(response -> {
-                        long endTime = System.currentTimeMillis();
-                        return CompletableFuture.completedFuture(new TestResult(param.first(), endTime - startTime));
-                    });
-                }).fold(new TestResult(), (res, element) ->
-                        res.add(element)
-                ).map(param -> {
-                    storeActor.tell(param, ActorRef.noSender());
-                    return param.getAvrTime();
-                }).toMat(Sink.head(), Keep.right());
+    private Sink<Pair<String, Integer>, CompletionStage<Long>> makeRequest(String url) {
+        return http.singleRequest();
     }
 
     private static final String SERVER_URL = "localhosl:8000";
