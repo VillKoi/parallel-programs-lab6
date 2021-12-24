@@ -42,42 +42,21 @@ public class ActorRouter {
 //    и делает запрос к нему с аналогичными query параметрами (url, counter) но счетчиком на 1 меньше.
 //    Либо осуществляет  запрос по url из параметра
 
-    public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
-        return Flow.of(HttpRequest.class)
-                .map(request -> {
-                    Query query = request.getUri().query();
-                    Optional<String> url = query.get(URL_QUERY);
-                    Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
-
-                    Integer requestNumber = Integer.parseInt(count.get());
-                    if (requestNumber == 0) {
-                        return makeRequest(url.get());
-                    }
-
-                    String newUrl = getNewUrl(url.get(), requestNumber - 1);
-
-                    return makeRequest(newUrl);
-                });
-    }
-
     private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
         return route(
                 get(() -> {
-                    Future<Object> res = Patterns.ask(storeActor, key, TIMEOUT);
-                    return completeOKWithFuture(res, Jackson.marshaller());
-
                     Query query = request.getUri().query();
                     Optional<String> url = query.get(URL_QUERY);
                     Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
 
                     Integer requestNumber = Integer.parseInt(count.get());
                     if (requestNumber == 0) {
-                        return makeRequest(url.get());
+                        return  completeWithFuture(makeRequest(url.get()));
                     }
 
                     String newUrl = getNewUrl(url.get(), requestNumber - 1);
 
-                    return makeRequest(newUrl);
+                    return completeWithFuture(makeRequest(newUrl));
                 })
         );
 
@@ -88,13 +67,13 @@ public class ActorRouter {
 
     private static Http client;
 
-    private CompletionStage<HttpResponse> makeRequest(String url) {
+    private static CompletionStage<HttpResponse> makeRequest(String url) {
         return client.singleRequest(HttpRequest.create(url));
     }
 
     private static final String SERVER_URL = "localhosl:8000";
 
-    private String getNewUrl(String url, Integer requestNumber) {
+    private static String getNewUrl(String url, Integer requestNumber) {
         return Uri.create(SERVER_URL).query(Query.create(
                         new Pair[]{
                                 Pair.create(URL_QUERY, url),
