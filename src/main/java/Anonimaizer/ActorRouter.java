@@ -15,6 +15,7 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import scala.concurrent.Future;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -47,19 +48,25 @@ public class ActorRouter {
         return route(
                 get(() -> headerValueByName("Raw-Request-URI", requestUri -> {
                             System.out.println(requestUri);
-                            URL url = new URL(requestUri);
-                            Query query = url.getQuery();
-                            Optional<String> testUrl = query.get(URL_QUERY);
-                            Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
+                    URL url = null;
+                    try {
+                        url = new URL(requestUri);
+                        Query query = url.getQuery();
+                        Optional<String> testUrl = query.get(URL_QUERY);
+                        Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
 
-                            Integer requestNumber = Integer.parseInt(count.get());
-                            if (requestNumber == 0) {
-                                return completeWithFuture(makeRequest(testUrl.get()));
-                            }
+                        Integer requestNumber = Integer.parseInt(count.get());
+                        if (requestNumber == 0) {
+                            return completeWithFuture(makeRequest(testUrl.get()));
+                        }
 
-                            String newUrl = getNewUrl(testUrl.get(), requestNumber - 1);
+                        String newUrl = getNewUrl(testUrl.get(), requestNumber - 1);
 
-                            return completeWithFuture(makeRequest(newUrl));
+                        return completeWithFuture(makeRequest(newUrl));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
                         }
                 ))
         );
