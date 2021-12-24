@@ -55,9 +55,9 @@ public class ActorRouter {
 
                                     String newUrl = getNewUrl(url, requestNumber - 1);
 
-                                    return completeWithFuture(Patterns.ask(
-                                            storeActor, newUrl, TIMEOUT
-                                    ));
+                                    return completeWithFuture(
+                                            Patterns.ask(storeActor, new RandomInt(), TIMEOUT).
+                                    );
                                 }
                         ))));
     }
