@@ -48,21 +48,20 @@ public class ActorRouter {
         return route(
                 get(() -> parameter(URL_QUERY, url ->
                         parameter(REQUEST_NUMBER_QUERY, count -> {
-                            int requestNumber = Integer.parseInt(count);
-                            if (requestNumber == 0) {
-                                return completeWithFuture(makeRequest(url));
-                            }
+                                    int requestNumber = Integer.parseInt(count);
+                                    if (requestNumber == 0) {
+                                        return completeWithFuture(makeRequest(url));
+                                    }
 
-                            String newUrl = getNewUrl(url, requestNumber - 1);
+                                    String newUrl = getNewUrl(url, requestNumber - 1);
 
-                            return completeWithFuture(Patterns.ask(
-                                            storeActor, key, TIMEOUT
-                                    )
-
-                                    makeRequest(newUrl));
-                        })
-                )));
+                                    return completeWithFuture(Patterns.ask(
+                                            storeActor, newUrl, TIMEOUT
+                                    ));
+                                }
+                        ))));
     }
+
 
     private static Http client;
 
