@@ -45,6 +45,9 @@ public class ActorRouter {
     private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
         return route(
                 get(() -> {
+                    getUri()
+                    request().toString();
+                    System.out.println(request(re).toString());
                     Query query = request.getUri().query();
                     Optional<String> url = query.get(URL_QUERY);
                     Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
