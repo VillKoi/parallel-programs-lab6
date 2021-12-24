@@ -60,9 +60,6 @@ public class ActorRouter {
                 )));
     }
 
-    ;
-
-
     private static Http client;
 
     private static CompletionStage<HttpResponse> makeRequest(String url) {
