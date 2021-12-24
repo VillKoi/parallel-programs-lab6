@@ -46,37 +46,18 @@ public class ActorRouter {
 
     private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
         return route(
-                get(() -> parameter(URL_QUERY, url -> {
-                    parameter(REQUEST_NUMBER_QUERY, key -> {
-                        Future<Object> res = Patterns.ask(storeActor, key, TIMEOUT);
-                        return completeOKWithFuture(res, Jackson.marshaller());
-                    })
-                })));
+                get(() -> parameter(URL_QUERY, url ->
+                        parameter(REQUEST_NUMBER_QUERY, count -> {
+                            int requestNumber = Integer.parseInt(count);
+                            if (requestNumber == 0) {
+                                return completeWithFuture(makeRequest(url));
+                            }
 
-        headerValueByName("Raw-Request-URI", requestUri -> {
-            System.out.println(requestUri);
-            URL url = null;
-            try {
-                url = new URL(requestUri);
-                String query = url.getQuery();
-                Optional<String> testUrl = query.get(URL_QUERY);
-                Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
+                            String newUrl = getNewUrl(url, requestNumber - 1);
 
-                Integer requestNumber = Integer.parseInt(count.get());
-                if (requestNumber == 0) {
-                    return completeWithFuture(makeRequest(testUrl.get()));
-                }
-
-                String newUrl = getNewUrl(testUrl.get(), requestNumber - 1);
-
-                return completeWithFuture(makeRequest(newUrl));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-        }))
-        );
-
+                            return completeWithFuture(makeRequest(newUrl));
+                        })
+                )));
     }
 
     ;
