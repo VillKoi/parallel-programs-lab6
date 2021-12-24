@@ -36,7 +36,6 @@ public class ActorRouter {
 //    и делает запрос к нему с аналогичными query параметрами (url, counter) но счетчиком на 1 меньше.
 //    Либо осуществляет  запрос по url из параметра
 
-
     public Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer) {
         return Flow.of(HttpRequest.class)
                 .map(request -> {
@@ -92,7 +91,7 @@ public class ActorRouter {
                 }).toMat(Sink.head(), Keep.right());
     }
 
-    private static final String SERVER_URL = "localhosl:8000"
+    private static final String SERVER_URL = "localhosl:8000";
 
     private String getNewUrl(String url, Integer requestNumber) {
         return Uri.create(SERVER_URL).query(Query.create(
