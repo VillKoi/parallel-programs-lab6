@@ -62,12 +62,12 @@ public class ActorRouter {
 
     private static Route createRouter(ActorRef storeActor, ActorRef testActor ) {
         return route(
-                get(() -> concat(
+                get(() ->
                         path(RESULT_PATH_, () -> parameter(RESULT_QUERY, key -> {
                             Future<Object> res = Patterns.ask(storeActor, key, TIMEOUT);
                             return completeOKWithFuture(res, Jackson.marshaller());
                         }))
-                )),
+                ),
                 post(() -> concat(
                         path(TEST_RUN_PATH, ()->
                                 entity(
