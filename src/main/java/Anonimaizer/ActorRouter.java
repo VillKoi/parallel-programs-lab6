@@ -15,6 +15,7 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import scala.concurrent.Future;
 
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +47,8 @@ public class ActorRouter {
         return route(
                 get(() -> headerValueByName("Raw-Request-URI", requestUri -> {
                             System.out.println(requestUri);
-                            Query query = requestUri.getUri().query();
+                            URL url = new URL(requestUri);
+                            Query query = url.getUri().query();
                             Optional<String> url = query.get(URL_QUERY);
                             Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
 
