@@ -44,13 +44,9 @@ public class ActorRouter {
 
     private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
         return route(
-                get(() -> {
-                    requestContext
-                    getUri()
-                    context
-                    request().toString();
-                    System.out.println(request(re).toString());
-                    Query query = request.getUri().query();
+                get(() -> headerValueByName("Raw-Request-URI", requestUri ->
+//                    System.out.println(requestUri);
+                    Query query = requestUri.getUri().query();
                     Optional<String> url = query.get(URL_QUERY);
                     Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
 
@@ -62,7 +58,7 @@ public class ActorRouter {
                     String newUrl = getNewUrl(url.get(), requestNumber - 1);
 
                     return completeWithFuture(makeRequest(newUrl));
-                })
+                ))
         );
 
     }
