@@ -3,9 +3,7 @@ package Anonimaizer;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class StoreActor extends AbstractActor {
 // создаем актор хранилище конфигурации.
@@ -22,8 +20,8 @@ public class StoreActor extends AbstractActor {
                     this.servers = servers.getServers();
                 }
         ).match(
-                Random.class, random -> {
-                    sender().tell(servers.get(random.getInt(servers.size())), ActorRef.noSender());
+                RandomInt.class, random -> {
+                    sender().tell(servers.get(random.getInt(servers.size() - 1)), ActorRef.noSender());
                 }
         ).build();
     }
