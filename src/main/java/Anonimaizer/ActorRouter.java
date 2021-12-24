@@ -60,26 +60,30 @@ public class ActorRouter {
                 });
     }
 
-    private static Route createRouter(ActorRef storeActor, ActorRef testActor ) {
+    private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
         return route(
-                get(() ->
-                        path(RESULT_PATH_, () -> parameter(RESULT_QUERY, key -> {
-                            Future<Object> res = Patterns.ask(storeActor, key, TIMEOUT);
-                            return completeOKWithFuture(res, Jackson.marshaller());
-                        }))
-                ),
-                post(() -> concat(
-                        path(TEST_RUN_PATH, ()->
-                                entity(
-                                        Jackson.unmarshaller(TestInputData.class), body ->  {
-                                            ArrayList<TestInformation> tests = body.GetTests();
-                                            for (TestInformation t: tests) {
-                                                testActor.tell(t, storeActor);
-                                            }
-                                            return complete(StatusCodes.OK);
-                                        })))
-                ));
-    };
+                get(() -> {
+                    Future<Object> res = Patterns.ask(storeActor, key, TIMEOUT);
+                    return completeOKWithFuture(res, Jackson.marshaller());
+
+                    Query query = request.getUri().query();
+                    Optional<String> url = query.get(URL_QUERY);
+                    Optional<String> count = query.get(REQUEST_NUMBER_QUERY);
+
+                    Integer requestNumber = Integer.parseInt(count.get());
+                    if (requestNumber == 0) {
+                        return makeRequest(url.get());
+                    }
+
+                    String newUrl = getNewUrl(url.get(), requestNumber - 1);
+
+                    return makeRequest(newUrl);
+                })
+        );
+
+    }
+
+    ;
 
 
     private static Http client;
