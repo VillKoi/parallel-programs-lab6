@@ -45,7 +45,7 @@ public class ActorRouter {
 
                     Integer requestNumber = Integer.parseInt(count.get());
                     if (requestNumber == 0) {
-                        return
+                        return makeRequest(url.get());
                     }
 
                     String newUrl = getNewUrl(url.get(), requestNumber);
@@ -71,7 +71,7 @@ public class ActorRouter {
                 );
     }
 
-    private Sink<Pair<String, Integer>, CompletionStage<Long>> makeRequest(String url) {
+    private CompletionStage<HttpResponse> makeRequest(String url) {
         return http.singleRequest();
     }
 
