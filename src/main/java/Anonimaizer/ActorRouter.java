@@ -49,7 +49,7 @@ public class ActorRouter {
                         return
                     }
 
-                    String newUrl = getNewUrl(url, count);
+                    String newUrl = getNewUrl(url.get(), requestNumber);
 
                     return new Pair<>(url.get(), count.get());
                 })
@@ -92,9 +92,15 @@ public class ActorRouter {
                 }).toMat(Sink.head(), Keep.right());
     }
 
-    private static final String SERVER_URL
+    private static final String SERVER_URL = "localhosl:8000"
 
-    private String getUrlQuery(String url, Integer requestNumber) {
-      return Uri.create()
-    };
+    private String getNewUrl(String url, Integer requestNumber) {
+        return Uri.create(SERVER_URL).query(Query.create(
+                        new Pair[]{
+                                Pair.create(URL_QUERY, url),
+                                Pair.create(REQUEST_NUMBER_QUERY, requestNumber)
+                        }
+                )
+        ).toString();
+    }
 }
