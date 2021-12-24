@@ -2,6 +2,7 @@ package Anonimaizer;
 
 import akka.NotUsed;
 import akka.actor.ActorRef;
+import akka.http.javadsl.Http;
 import akka.http.javadsl.model.*;
 import akka.japi.Pair;
 import akka.pattern.Patterns;
@@ -48,31 +49,16 @@ public class ActorRouter {
                         return makeRequest(url.get());
                     }
 
-                    String newUrl = getNewUrl(url.get(), requestNumber);
+                    String newUrl = getNewUrl(url.get(), requestNumber - 1);
 
-                    return new Pair<>(url.get(), count.get());
-                })
-                .mapAsync(4, param -> {
-                    TestInformation information = new TestInformation(param.first(), param.second());
-                    return Patterns.ask(storeActor, information, TIMEOUT_DURATION)
-                            .thenCompose(response -> {
-                                TestResult result = (TestResult) response;
-                                if (result.isReady()) {
-                                    return CompletableFuture.completedFuture(result.getAvrTime());
-                                }
-
-                                Sink<Pair<String, Integer>, CompletionStage<Long>> testSink = createFlow();
-                                return Source.from(Collections.singletonList(param))
-                                        .toMat(testSink, Keep.right())
-                                        .run(materializer);
-                            });
-                }).map(param ->
-                        HttpResponse.create().withEntity(HttpEntities.create(param.toString()))
-                );
+                    return makeRequest(newUrl);
+                });
     }
 
+    private static Http client;
+
     private CompletionStage<HttpResponse> makeRequest(String url) {
-        return http.singleRequest();
+        return client.singleRequest(HttpRequest.create(url));
     }
 
     private static final String SERVER_URL = "localhosl:8000";
