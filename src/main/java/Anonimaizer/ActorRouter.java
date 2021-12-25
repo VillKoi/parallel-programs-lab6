@@ -36,7 +36,7 @@ public class ActorRouter {
 //    и делает запрос к нему с аналогичными query параметрами (url, counter) но счетчиком на 1 меньше.
 //    Либо осуществляет  запрос по url из параметра
 
-    public Route createRouter(ActorRef storeActor) {
+    public Route createRouter() {
         return route(
                 get(() -> parameter(URL_QUERY, url ->
                         parameter(REQUEST_NUMBER_QUERY, count -> {
