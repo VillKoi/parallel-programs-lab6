@@ -3,10 +3,11 @@ package Anonimaizer;
 import akka.actor.ActorRef;
 import org.apache.zookeeper.*;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ZooK {
+public class ZooK implements Watcher {
     private ZooKeeper zooKeeper;
 
     private final String PATH = "/servers";
@@ -29,7 +30,7 @@ public class ZooK {
                 CreateMode.EPHEMERAL);
     }
 
-    public void sendServers() {
+    public void sendServers() throws InterruptedException, KeeperException {
         List<String> servers = zooKeeper.getChildren(PATH, this);
         this.storeActor.tell(new ServerList(servers), ActorRef.noSender());
     }

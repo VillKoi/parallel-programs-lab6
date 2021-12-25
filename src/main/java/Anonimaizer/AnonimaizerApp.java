@@ -15,6 +15,7 @@ import akka.stream.ActorMaterializer;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.stream.javadsl.Flow;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 
 import static akka.actor.TypedActor.context;
@@ -26,7 +27,7 @@ public class AnonimaizerApp {
     private final static String ZOOK_CONNECT = "localhosl:2181";
     private final static int ZOOK_TIMEOUT = 2000;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
         if (args.length != 1) {
             System.err.println("Usage: AnonimaizerApp <1: input port>");
             System.exit(-1);
