@@ -12,17 +12,12 @@ import akka.http.javadsl.model.HttpResponse;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
 public class AnonimaizerApp {
     private final static String HOST = "localhost";
-    private final static int PORT = 8080;
-
-    private final static String ZOOK_CONNECT = "127.0.0.1:2181";
-    private final static int ZOOK_TIMEOUT = 2000;
 
     public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
         if (args.length != 1) {
@@ -33,7 +28,6 @@ public class AnonimaizerApp {
         String port = args[0];
 
         System.out.println("start!");
-        System.out.println(ZOOK_CONNECT);
         ActorSystem system = ActorSystem.create("routes");
         ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
 
@@ -41,7 +35,6 @@ public class AnonimaizerApp {
         router.setStoreActor(storeActor);
 
         final ZooK zookeeper = new ZooK();
-        zookeeper.setZooKeeper(new ZooKeeper(ZOOK_CONNECT, ZOOK_TIMEOUT, null));
         zookeeper.setStoreActor(storeActor);
 
         zookeeper.createConnection(port);

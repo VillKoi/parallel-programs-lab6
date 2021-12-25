@@ -3,6 +3,7 @@ package Anonimaizer;
 import akka.actor.ActorRef;
 import org.apache.zookeeper.*;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -12,10 +13,13 @@ public class ZooK implements Watcher {
     private final String PATH = "/servers";
     private final String SERVER = "http://localhost";
 
+    private final static String ZOOK_CONNECT = "127.0.0.1:2181";
+    private final static int ZOOK_TIMEOUT = 2000;
+
     private ActorRef storeActor;
 
-    public void setZooKeeper(ZooKeeper zooKeeper) {
-        this.zooKeeper = zooKeeper;
+    public ZooK() throws IOException {
+        this.zooKeeper = new ZooKeeper(ZOOK_CONNECT, ZOOK_TIMEOUT, null);
     }
 
     public void setStoreActor(ActorRef storeActor) {
