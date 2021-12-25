@@ -30,7 +30,6 @@ public class ZooK implements Watcher {
                     CreateMode.EPHEMERAL);
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
-            this.zooKeeper.
         }
 
         this.storeActor.tell(new ServerList(SERVER + ':' + port), ActorRef.noSender());
@@ -39,6 +38,7 @@ public class ZooK implements Watcher {
     public void sendServers() throws InterruptedException, KeeperException {
         List<String> servers = zooKeeper.getChildren(PATH, this);
         System.out.println(servers);
+        System.out.println(zooKeeper.getData(PATH, false, null));
         this.storeActor.tell(new ServerList(servers), ActorRef.noSender());
     }
 
