@@ -19,7 +19,7 @@ public class StoreActor extends AbstractActor {
                     this.servers = servers.getServers();
                 }
         ).match(RandomInt.class, random -> {
-                    getSender().tell(servers.get(random.getInt(servers.size() - 1)), ActorRef.noSender());
+                    getSender().tell(servers.get(random.getInt(servers.size())), ActorRef.noSender());
                 }
         ).build();
     }
