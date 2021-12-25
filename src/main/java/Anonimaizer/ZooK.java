@@ -3,7 +3,6 @@ package Anonimaizer;
 import akka.actor.ActorRef;
 import org.apache.zookeeper.*;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 

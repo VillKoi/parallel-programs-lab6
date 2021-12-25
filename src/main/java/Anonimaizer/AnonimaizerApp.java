@@ -18,8 +18,6 @@ import akka.stream.javadsl.Flow;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 
-import static akka.actor.TypedActor.context;
-
 public class AnonimaizerApp {
     private final static String HOST = "localhost";
     private final static int PORT = 8080;
