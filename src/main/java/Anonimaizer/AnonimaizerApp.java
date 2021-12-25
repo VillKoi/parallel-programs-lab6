@@ -49,7 +49,6 @@ public class AnonimaizerApp {
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
         }
-        zookeeper.sendServers();
 
         final Http http = Http.get(system);
         router.setClient(http);
