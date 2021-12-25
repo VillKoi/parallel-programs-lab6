@@ -41,7 +41,7 @@ public class ActorRouter {
                 get(() -> parameter(URL_QUERY, url ->
                         parameter(REQUEST_NUMBER_QUERY, count -> {
                                     int requestNumber = Integer.parseInt(count);
-                                    if (requestNumber == 0) {
+                                    if (requestNumber <= 0) {
                                         return completeWithFuture(makeRequest(url));
                                     }
 
