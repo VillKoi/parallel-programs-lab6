@@ -46,7 +46,7 @@ public class AnonimaizerApp {
         zookeeper.createConnection(args[0]);
         zookeeper.sendServers();
 
-        final Http http = Http.get(context().system());
+        final Http http = Http.get(system);
         router.setClient(http);
 
         final ActorMaterializer materializer = ActorMaterializer.create(system);
