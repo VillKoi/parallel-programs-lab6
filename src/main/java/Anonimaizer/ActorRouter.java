@@ -49,7 +49,7 @@ public class ActorRouter {
 
                                     return completeWithFuture(
                                             Patterns.ask(this.storeActor, new RandomInt(), TIMEOUT)
-                                                    .th
+
                                     );
                                 }
                         ))));
