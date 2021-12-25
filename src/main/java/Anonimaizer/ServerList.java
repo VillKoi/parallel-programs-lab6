@@ -15,8 +15,6 @@ public class ServerList {
     }
 
     public ServerList(String server) {
-
-
         this.servers.add(server);
     }
 }
