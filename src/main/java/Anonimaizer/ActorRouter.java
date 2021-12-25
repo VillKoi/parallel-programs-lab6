@@ -28,9 +28,14 @@ import static akka.http.javadsl.server.Directives.*;
 
 public class ActorRouter {
     private ActorRef storeActor;
+    private static Http client;
 
     public void setStoreActor(ActorRef storeActor) {
         this.storeActor = storeActor;
+    }
+
+    public static void setClient(Http client) {
+        ActorRouter.client = client;
     }
 
     private static final String URL_QUERY = "url";
@@ -39,7 +44,8 @@ public class ActorRouter {
     private final static int TIMEOUT = 5000;
     private final static Duration TIMEOUT_DURATION = Duration.ofMillis(TIMEOUT);
 
-//    создаем с помощью api route в акка http сервер который принимает два параметра, и если счетчик не равен 0,
+
+    //    создаем с помощью api route в акка http сервер который принимает два параметра, и если счетчик не равен 0,
 //    то сначала получает новый урл сервера (от актора хранилища конфигурации)
 //    и делает запрос к нему с аналогичными query параметрами (url, counter) но счетчиком на 1 меньше.
 //    Либо осуществляет  запрос по url из параметра
@@ -63,8 +69,6 @@ public class ActorRouter {
                         ))));
     }
 
-
-    private static Http client;
 
     private static CompletionStage<HttpResponse> makeRequest(String url) {
         return client.singleRequest(HttpRequest.create(url));
