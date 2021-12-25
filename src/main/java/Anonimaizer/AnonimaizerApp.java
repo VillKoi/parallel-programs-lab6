@@ -15,12 +15,15 @@ import akka.stream.ActorMaterializer;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.stream.javadsl.Flow;
+import org.apache.zookeeper.ZooKeeper;
 
 import static akka.actor.TypedActor.context;
 
 public class AnonimaizerApp {
     private final static String HOST = "localhost";
     private final static int PORT = 8080;
+
+    private final static String ZOOK_CONNECT = "localhosl:";
 
     public static void main(String[] args) throws IOException {
         System.out.println("start!");
@@ -31,7 +34,7 @@ public class AnonimaizerApp {
         router.setStoreActor(storeActor);
 
         final ZooK zookeeper = new ZooK();
-        zookeeper.setZooKeeper();
+        zookeeper.setZooKeeper(new ZooKeeper());
         zookeeper.setStoreActor(storeActor);
         zookeeper.createConnection();
         zookeeper.sendServers();
