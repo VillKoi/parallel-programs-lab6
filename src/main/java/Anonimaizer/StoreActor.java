@@ -15,13 +15,11 @@ public class StoreActor extends AbstractActor {
     @Override
     public AbstractActor.Receive createReceive(){
         return receiveBuilder(
-        ).match(
-                ServerList.class, servers -> {
+        ).match(ServerList.class, servers -> {
                     this.servers = servers.getServers();
                 }
-        ).match(
-                RandomInt.class, random -> {
-                    sender().tell(servers.get(random.getInt(servers.size() - 1)), ActorRef.noSender());
+        ).match(RandomInt.class, random -> {
+                    getSender().tell(servers.get(random.getInt(servers.size() - 1)), ActorRef.noSender());
                 }
         ).build();
     }

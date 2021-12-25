@@ -31,13 +31,12 @@ public class ActorRouter {
     private final static int TIMEOUT = 5000;
     private final static Duration TIMEOUT_DURATION = Duration.ofMillis(TIMEOUT);
 
-
     //    создаем с помощью api route в акка http сервер который принимает два параметра, и если счетчик не равен 0,
 //    то сначала получает новый урл сервера (от актора хранилища конфигурации)
 //    и делает запрос к нему с аналогичными query параметрами (url, counter) но счетчиком на 1 меньше.
 //    Либо осуществляет  запрос по url из параметра
 
-    public static Route createRouter(ActorRef storeActor) {
+    public Route createRouter(ActorRef storeActor) {
         return route(
                 get(() -> parameter(URL_QUERY, url ->
                         parameter(REQUEST_NUMBER_QUERY, count -> {
@@ -49,8 +48,8 @@ public class ActorRouter {
                                     String newUrl = getNewUrl(url, requestNumber - 1);
 
                                     return completeWithFuture(
-                                            Patterns.ask(storeActor, new RandomInt(), TIMEOUT)
-                                                    .then
+                                            Patterns.ask(this.storeActor, new RandomInt(), TIMEOUT)
+                                                    .th
                                     );
                                 }
                         ))));
