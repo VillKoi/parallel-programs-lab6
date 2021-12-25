@@ -27,6 +27,11 @@ public class AnonimaizerApp {
     private final static int ZOOK_TIMEOUT = 2000;
 
     public static void main(String[] args) throws IOException {
+        if (args.length != 1) {
+            System.err.println("Usage: AnonimaizerApp <1: input port>");
+            System.exit(-1);
+        }
+
         System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
         ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
@@ -35,7 +40,7 @@ public class AnonimaizerApp {
         router.setStoreActor(storeActor);
 
         final ZooK zookeeper = new ZooK();
-        zookeeper.setZooKeeper(new ZooKeeper(ZOOK_CONNECT, 2000, null));
+        zookeeper.setZooKeeper(new ZooKeeper(ZOOK_CONNECT, ZOOK_TIMEOUT, null));
         zookeeper.setStoreActor(storeActor);
         zookeeper.createConnection();
         zookeeper.sendServers();
