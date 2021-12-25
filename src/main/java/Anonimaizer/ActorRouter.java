@@ -48,8 +48,10 @@ public class ActorRouter {
                                     String newUrl = getNewUrl(url, requestNumber - 1);
 
                                     return completeWithFuture(
-                                            Patterns.ask(this.storeActor, new RandomInt(), TIMEOUT)
-
+                                            Patterns.ask(this.storeActor, new RandomInt(), TIMEOUT_DURATION)
+                                                    .thenCompose(serverUrl -> {
+                                                        
+                                                    })
                                     );
                                 }
                         ))));
