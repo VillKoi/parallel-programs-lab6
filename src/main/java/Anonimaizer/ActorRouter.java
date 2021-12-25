@@ -37,7 +37,7 @@ public class ActorRouter {
 //    и делает запрос к нему с аналогичными query параметрами (url, counter) но счетчиком на 1 меньше.
 //    Либо осуществляет  запрос по url из параметра
 
-    private static Route createRouter(ActorRef storeActor, ActorRef testActor) {
+    public static Route createRouter(ActorRef storeActor) {
         return route(
                 get(() -> parameter(URL_QUERY, url ->
                         parameter(REQUEST_NUMBER_QUERY, count -> {
@@ -50,7 +50,7 @@ public class ActorRouter {
 
                                     return completeWithFuture(
                                             Patterns.ask(storeActor, new RandomInt(), TIMEOUT)
-                                                    .thenApply()
+                                                    .then
                                     );
                                 }
                         ))));

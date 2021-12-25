@@ -16,6 +16,8 @@ import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.stream.javadsl.Flow;
 
+import static akka.actor.TypedActor.context;
+
 public class AnonimaizerApp {
     private final static String HOST = "localhost";
     private final static int PORT = 8080;
@@ -31,15 +33,14 @@ public class AnonimaizerApp {
         final Http http = Http.get(context().system());
         router.setClient(http);
 
-        final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
-        router.setStoreActor(system.actorOf(Props.create(StoreActor.class)));
-        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = router.createFlow(materializer);
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = router.createRouter(storeActor).flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost(HOST, PORT),
                 materializer
         );
+
         System.out.println("Server online at http://localhost:8080/\nPress RETURN to stop...");
         System.in.read();
         binding
