@@ -16,6 +16,7 @@ public class StoreActor extends AbstractActor {
     public AbstractActor.Receive createReceive(){
         return receiveBuilder(
         ).match(ServerList.class, servers -> {
+                    System.out.println(servers.getServers());
                     this.servers = servers.getServers();
                 }
         ).match(RandomInt.class, random -> {

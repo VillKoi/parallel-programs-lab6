@@ -62,8 +62,6 @@ public class ActorRouter {
         return client.singleRequest(HttpRequest.create(url));
     }
 
-    private static final String SERVER_URL = "localhosl:8000";
-
     private static String getNewUrl(String serverDomain, String url, Integer requestNumber) {
         return Uri.create(serverDomain).query(Query.create(
                         new Pair[]{
