@@ -1,19 +1,49 @@
 package Anonimaizer;
 
 import akka.actor.ActorRef;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class ZooK {
     private ZooKeeper zooKeeper;
 
-    private final String PATH = '/servers';
+    private final String PATH = "/servers";
+    private final String SERVER = "localhost";
 
     private ActorRef storeActor;
 
+    public void setZooKeeper(ZooKeeper zooKeeper) {
+        this.zooKeeper = zooKeeper;
+    }
+
+    public void setStoreActor(ActorRef storeActor) {
+        this.storeActor = storeActor;
+    }
+
+    public void createConnection(String port) throws KeeperException, InterruptedException {
+        this.zooKeeper.create(SERVER + ':' + port,
+                port.getBytes(StandardCharsets.UTF_8),
+                ZooDefs.Ids.OPEN_ACL_UNSAFE,
+                CreateMode.EPHEMERAL);
+    }
+
     public void sendServers() {
         List<String> servers = zooKeeper.getChildren(PATH, this);
-        this.storeActor.tell(new ServerList(servers));
+        this.storeActor.tell(new ServerList(servers), ActorRef.noSender());
     }
+
+    @Override
+    public void process(WatchedEvent watchedEvent) {
+        try {
+            sendServers();
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 }
