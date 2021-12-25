@@ -39,18 +39,14 @@ public class ZooK implements Watcher {
         this.storeActor.tell(new ServerList(SERVER + ':' + port), ActorRef.noSender());
     }
 
-    public void sendServers() throws InterruptedException, KeeperException {
-        List<String> servers = zooKeeper.getChildren(PATH, this);
-        System.out.println(servers);
-        System.out.println("Data"+ zooKeeper.getData(PATH, false, null));
-        this.storeActor.tell(new ServerList(servers), ActorRef.noSender());
-    }
-
     @Override
     public void process(WatchedEvent watchedEvent) {
         try {
             System.out.println("process");
-            sendServers();
+            List<String> servers = zooKeeper.getChildren(PATH, this);
+            System.out.println(servers);
+            System.out.println("Data"+ zooKeeper.getData(PATH, false, null));
+            this.storeActor.tell(new ServerList(servers), ActorRef.noSender());
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
         }
