@@ -33,6 +33,9 @@ public class AnonimaizerApp {
             System.exit(-1);
         }
 
+        String port = args[0];
+        int in
+
         System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
         ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
@@ -45,7 +48,7 @@ public class AnonimaizerApp {
         zookeeper.setStoreActor(storeActor);
 
         try {
-            zookeeper.createConnection(args[0]);
+            zookeeper.createConnection(port);
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,7 +61,7 @@ public class AnonimaizerApp {
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = router.createRouter().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
-                ConnectHttp.toHost(HOST, PORT),
+                ConnectHttp.toHost(HOST, port),
                 materializer
         );
 
