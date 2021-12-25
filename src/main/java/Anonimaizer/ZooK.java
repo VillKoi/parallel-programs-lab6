@@ -49,6 +49,7 @@ public class ZooK implements Watcher {
     @Override
     public void process(WatchedEvent watchedEvent) {
         try {
+            System.out.println("process");
             sendServers();
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
