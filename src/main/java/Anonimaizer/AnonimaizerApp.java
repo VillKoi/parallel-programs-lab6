@@ -23,7 +23,8 @@ public class AnonimaizerApp {
     private final static String HOST = "localhost";
     private final static int PORT = 8080;
 
-    private final static String ZOOK_CONNECT = "localhosl:";
+    private final static String ZOOK_CONNECT = "localhosl:2181";
+    private final static int ZOOK_TIMEOUT = 2000;
 
     public static void main(String[] args) throws IOException {
         System.out.println("start!");
@@ -34,7 +35,7 @@ public class AnonimaizerApp {
         router.setStoreActor(storeActor);
 
         final ZooK zookeeper = new ZooK();
-        zookeeper.setZooKeeper(new ZooKeeper());
+        zookeeper.setZooKeeper(new ZooKeeper(ZOOK_CONNECT, 2000, null));
         zookeeper.setStoreActor(storeActor);
         zookeeper.createConnection();
         zookeeper.sendServers();
