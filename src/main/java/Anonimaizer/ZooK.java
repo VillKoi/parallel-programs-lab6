@@ -1,2 +1,4 @@
-package Anonimaizer;public class ZooK {
+package Anonimaizer;
+
+public class ZooK {
 }
