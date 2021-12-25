@@ -8,4 +8,8 @@ public class ServerList {
     public List<String> getServers() {
         return this.servers;
     }
+
+    public ServerList(List<String> servers) {
+        this.servers = servers;
+    }
 }
