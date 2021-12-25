@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
 import akka.NotUsed;
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.http.javadsl.ConnectHttp;
@@ -22,9 +23,13 @@ public class AnonimaizerApp {
     public static void main(String[] args) throws IOException {
         System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
+        ActorRef storeActor = system.actorOf(Props.create(StoreActor.class));
 
         ActorRouter router = new ActorRouter();
-        router.
+        router.setStoreActor(storeActor);
+
+        final Http http = Http.get(context().system());
+        router.setClient(http);
 
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);

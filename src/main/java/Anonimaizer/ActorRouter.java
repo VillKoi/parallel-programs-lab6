@@ -1,27 +1,14 @@
 package Anonimaizer;
 
-import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.http.javadsl.Http;
-import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.*;
 import akka.http.javadsl.server.Route;
 import akka.japi.Pair;
 import akka.pattern.Patterns;
-import akka.stream.ActorMaterializer;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import scala.concurrent.Future;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+
 import java.util.concurrent.CompletionStage;
 
 import static akka.http.javadsl.server.Directives.*;
