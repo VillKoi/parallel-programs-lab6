@@ -43,7 +43,12 @@ public class AnonimaizerApp {
         final ZooK zookeeper = new ZooK();
         zookeeper.setZooKeeper(new ZooKeeper(ZOOK_CONNECT, ZOOK_TIMEOUT, null));
         zookeeper.setStoreActor(storeActor);
-        zookeeper.createConnection(args[0]);
+
+        try {
+            zookeeper.createConnection(args[0]);
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
         zookeeper.sendServers();
 
         final Http http = Http.get(system);
