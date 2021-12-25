@@ -30,6 +30,7 @@ public class ZooK implements Watcher {
                     CreateMode.EPHEMERAL);
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
+            this.zooKeeper.
         }
 
         this.storeActor.tell(new ServerList(SERVER + ':' + port), ActorRef.noSender());
