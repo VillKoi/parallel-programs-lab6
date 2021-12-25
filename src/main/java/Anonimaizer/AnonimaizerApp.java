@@ -34,9 +34,7 @@ public class AnonimaizerApp {
         ActorRouter router = new ActorRouter();
         router.setStoreActor(storeActor);
 
-        final ZooK zookeeper = new ZooK();
-        zookeeper.setStoreActor(storeActor);
-        zookeeper.createConnection(port);
+        final ZooK zookeeper = new ZooK(storeActor, port);
 
         final Http http = Http.get(system);
         router.setClient(http);

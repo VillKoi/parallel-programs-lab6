@@ -18,17 +18,12 @@ public class ZooK implements Watcher {
 
     private ActorRef storeActor;
 
-    public ZooK() throws IOException {
+    public ZooK(ActorRef storeActor, String port) throws IOException {
         this.zooKeeper = new ZooKeeper(ZOOK_CONNECT, ZOOK_TIMEOUT, null);
-    }
-
-    public void setStoreActor(ActorRef storeActor) {
         this.storeActor = storeActor;
-    }
 
-    public void createConnection(String port) {
         try {
-            this.zooKeeper.create(PATH + "/"  + port,
+            this.zooKeeper.create(PATH + "/" + port,
                     (SERVER + ":" + port).getBytes(StandardCharsets.UTF_8),
                     ZooDefs.Ids.OPEN_ACL_UNSAFE,
                     CreateMode.EPHEMERAL_SEQUENTIAL);
