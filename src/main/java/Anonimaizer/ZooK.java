@@ -32,6 +32,7 @@ public class ZooK implements Watcher {
 
     public void sendServers() throws InterruptedException, KeeperException {
         List<String> servers = zooKeeper.getChildren(PATH, this);
+        System.out.println(servers);
         this.storeActor.tell(new ServerList(servers), ActorRef.noSender());
     }
 
@@ -43,6 +44,4 @@ public class ZooK implements Watcher {
             e.printStackTrace();
         }
     }
-
-
 }
