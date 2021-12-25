@@ -59,16 +59,14 @@ public class ActorRouter {
 
 
     private static CompletionStage<HttpResponse> makeRequest(String url) {
+        System.out.println(url);
         return client.singleRequest(HttpRequest.create(url));
     }
 
     private static String getNewUrl(String serverDomain, String url, Integer requestNumber) {
         return Uri.create(serverDomain).query(Query.create(
-                        new Pair[]{
-                                Pair.create(URL_QUERY, url),
-                                Pair.create(REQUEST_NUMBER_QUERY, requestNumber)
-                        }
-                )
+                Pair.create(URL_QUERY, url),
+                Pair.create(REQUEST_NUMBER_QUERY, String.valueOf(requestNumber)))
         ).toString();
     }
 }
