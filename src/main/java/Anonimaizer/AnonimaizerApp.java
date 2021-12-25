@@ -36,7 +36,6 @@ public class AnonimaizerApp {
 
         final ZooK zookeeper = new ZooK();
         zookeeper.setStoreActor(storeActor);
-
         zookeeper.createConnection(port);
 
         final Http http = Http.get(system);
