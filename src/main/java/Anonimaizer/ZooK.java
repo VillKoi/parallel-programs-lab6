@@ -31,7 +31,7 @@ public class ZooK implements Watcher {
             this.zooKeeper.create(PATH + "/"  + port,
                     (SERVER + ":" + port).getBytes(StandardCharsets.UTF_8),
                     ZooDefs.Ids.OPEN_ACL_UNSAFE,
-                    CreateMode.EPHEMERAL);
+                    CreateMode.EPHEMERAL_SEQUENTIAL);
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
         }
