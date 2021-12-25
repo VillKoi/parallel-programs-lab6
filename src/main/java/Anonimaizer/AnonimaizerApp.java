@@ -24,7 +24,7 @@ public class AnonimaizerApp {
     private final static String HOST = "localhost";
     private final static int PORT = 8080;
 
-    private final static String ZOOK_CONNECT = "127.0.0.1:2182";
+    private final static String ZOOK_CONNECT = "localhost:2182";
     private final static int ZOOK_TIMEOUT = 2000;
 
     public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
