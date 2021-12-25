@@ -26,7 +26,7 @@ public class ZooK implements Watcher {
         this.storeActor = storeActor;
     }
 
-    public void createConnection(String port) throws KeeperException, InterruptedException {
+    public void createConnection(String port) {
         try {
             this.zooKeeper.create(PATH + "/"  + port,
                     (SERVER + ":" + port).getBytes(StandardCharsets.UTF_8),
