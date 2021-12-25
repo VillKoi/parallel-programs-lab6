@@ -28,6 +28,7 @@ public class ZooK implements Watcher {
                 port.getBytes(StandardCharsets.UTF_8),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE,
                 CreateMode.EPHEMERAL);
+        this.storeActor.tell(SERVER + ':' + port, ActorRef.noSender());
     }
 
     public void sendServers() throws InterruptedException, KeeperException {
