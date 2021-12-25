@@ -24,6 +24,7 @@ public class AnonimaizerApp {
         ActorSystem system = ActorSystem.create("routes");
 
         ActorRouter router = new ActorRouter();
+        router.
 
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
