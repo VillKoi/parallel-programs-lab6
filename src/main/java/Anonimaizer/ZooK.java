@@ -23,10 +23,15 @@ public class ZooK implements Watcher {
     }
 
     public void createConnection(String port) throws KeeperException, InterruptedException {
-        this.zooKeeper.create(PATH,
-                (SERVER + port).getBytes(StandardCharsets.UTF_8),
-                ZooDefs.Ids.OPEN_ACL_UNSAFE,
-                CreateMode.EPHEMERAL);
+        try {
+            this.zooKeeper.create(PATH,
+                    (SERVER + port).getBytes(StandardCharsets.UTF_8),
+                    ZooDefs.Ids.OPEN_ACL_UNSAFE,
+                    CreateMode.EPHEMERAL);
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         this.storeActor.tell(new ServerList(SERVER + ':' + port), ActorRef.noSender());
     }
 
