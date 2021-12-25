@@ -24,7 +24,7 @@ public class ZooK implements Watcher {
     }
 
     public void createConnection(String port) throws KeeperException, InterruptedException {
-        this.zooKeeper.create(PATH + "/" + SERVER,
+        this.zooKeeper.create(PATH ,
                 port.getBytes(StandardCharsets.UTF_8),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE,
                 CreateMode.EPHEMERAL);
