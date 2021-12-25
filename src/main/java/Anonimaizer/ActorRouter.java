@@ -45,13 +45,13 @@ public class ActorRouter {
                                         return completeWithFuture(makeRequest(url));
                                     }
 
-                                    String newUrl = getNewUrl(url, requestNumber - 1);
+                                    int newRequestNumber = requestNumber - 1;
 
                                     return completeWithFuture(
                                             Patterns.ask(this.storeActor, new RandomInt(), TIMEOUT_DURATION)
-                                                    .thenCompose(serverUrl -> {
-                                                        makeRequest(newUrl);
-                                                    })
+                                                    .thenCompose(serverUrl -> makeRequest(
+                                                            getNewUrl(serverUrl.toString(), url, newRequestNumber)
+                                                    ))
                                     );
                                 }
                         ))));
@@ -64,8 +64,8 @@ public class ActorRouter {
 
     private static final String SERVER_URL = "localhosl:8000";
 
-    private static String getNewUrl(String serverDomain ,String url, Integer requestNumber) {
-        return Uri.create(SERVER_URL).query(Query.create(
+    private static String getNewUrl(String serverDomain, String url, Integer requestNumber) {
+        return Uri.create(serverDomain).query(Query.create(
                         new Pair[]{
                                 Pair.create(URL_QUERY, url),
                                 Pair.create(REQUEST_NUMBER_QUERY, requestNumber)
