@@ -24,7 +24,7 @@ public class AnonimaizerApp {
     private final static String HOST = "localhost";
     private final static int PORT = 8080;
 
-    private final static String ZOOK_CONNECT = "localhost:2182";
+    private final static String ZOOK_CONNECT = "127.0.0.1:2182";
     private final static int ZOOK_TIMEOUT = 2000;
 
     public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
@@ -34,7 +34,6 @@ public class AnonimaizerApp {
         }
 
         String port = args[0];
-        int in
 
         System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
@@ -61,7 +60,7 @@ public class AnonimaizerApp {
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = router.createRouter().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
-                ConnectHttp.toHost(HOST, port),
+                ConnectHttp.toHost(HOST, Integer.parseInt(port)),
                 materializer
         );
 
