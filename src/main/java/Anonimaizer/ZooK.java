@@ -29,7 +29,7 @@ public class ZooK implements Watcher {
     public void createConnection(String port) throws KeeperException, InterruptedException {
         try {
             this.zooKeeper.create(PATH,
-                    (SERVER + port).getBytes(StandardCharsets.UTF_8),
+                    (SERVER + ":" + port).getBytes(StandardCharsets.UTF_8),
                     ZooDefs.Ids.OPEN_ACL_UNSAFE,
                     CreateMode.EPHEMERAL);
         } catch (KeeperException | InterruptedException e) {
@@ -42,7 +42,7 @@ public class ZooK implements Watcher {
     public void sendServers() throws InterruptedException, KeeperException {
         List<String> servers = zooKeeper.getChildren(PATH, this);
         System.out.println(servers);
-        System.out.println(zooKeeper.getData(PATH, false, null));
+        System.out.println("Data"+ zooKeeper.getData(PATH, false, null));
         this.storeActor.tell(new ServerList(servers), ActorRef.noSender());
     }
 
