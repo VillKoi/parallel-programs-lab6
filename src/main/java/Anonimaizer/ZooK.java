@@ -10,7 +10,7 @@ public class ZooK implements Watcher {
     private ZooKeeper zooKeeper;
 
     private final String PATH = "/servers";
-    private final String SERVER = "localhost";
+    private final String SERVER = "http://localhost";
 
     private ActorRef storeActor;
 
